@@ -77,7 +77,34 @@ class Solution:
                 self.helper(row+1,n,matrix)
                 matrix[row][col]="0"
 
+class Solution:
+    def solveNQueens(self, n: int) -> list[list[str]]:
+        result=[]
+        subset=[["." for _ in range(n)] for _ in range(n)]
+        cols=set()
+        pos_dia=set()
+        neg_dia=set()
+        self.helper(result,subset,0,cols,pos_dia,neg_dia,n)
+        return result
 
+    def helper(self,res:list[list[str]],subset:list[str],row:int,cols:set,pos_dia:set,neg_dia:set,n:int):
+        if row==n:
+            res.append(["".join(r) for r in subset])
+            return 
+        for col in range(n):
+            if col in cols or (row+col) in pos_dia or (row-col) in neg_dia:
+                continue 
+            cols.add(col)
+            pos_dia.add(row+col)
+            neg_dia.add(row-col)
+            subset[row][col]='Q'
+            self.helper(res,subset,row+1,cols,pos_dia,neg_dia,n)
+            subset[row][col]="."
+            cols.remove(col)
+            pos_dia.remove(row+col)
+            neg_dia.remove(row-col)
+        
+        
 class TestApp:
       def testCaseOne(self):
           assert Solution().solveNQueens(4)==[[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
